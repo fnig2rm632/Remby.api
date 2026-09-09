@@ -1,4 +1,4 @@
-namespace ECommerce.Domain.Common;
+namespace Remby.Domain.Common;
 
 public record Error(string Message, ErrorType ErrorType)
 {
@@ -11,31 +11,6 @@ public record Error(string Message, ErrorType ErrorType)
     private static Error Internal(string message = "Something went wrong") => new(message, ErrorType.Internal);
     private static Error Unavailable(string massage = "Service Unavailable") => new(massage, ErrorType.Unavailable);
     private static Error Timeout(string massage = "Gateway Timeout") => new(massage, ErrorType.Timeout);
-    
-    public static class ChemicalElement
-    {
-        public static Error InvalidAtomicNumber => Validation($"Atomic number must be between 1 and 118");
-        public static Error InvalidSymbol => Validation($"Symbol must be 1-3 characters");
-        public static Error EmptyName => Validation("Element name cannot be empty");
-        public static Error NegativeAtomicMass => Validation($"Atomic mass must be positive");
-        public static Error NotFound => NotFound($"Chemical Element not found");
-    }
-    
-    public static class Category
-    {
-        public static Error EmptyName => Validation("Category name cannot be empty");
-        public static Error NameTooLong(int maxLength) => 
-            Validation($"Category name cannot exceed {maxLength} characters");
-        public static Error DescriptionTooLong(int maxLength) => 
-            Validation($"Description cannot exceed {maxLength} characters");
-    }
-    
-    public static class Money
-    {
-        public static Error NegativeAmount(decimal amount) => Validation($"Amount cannot be negative. Got: {amount}");
-        public static Error InvalidCurrency(string currency) => Validation($"Currency {currency} is invalid");
-        public static Error TooManyDecimalPlaces => Validation("Can't be lenght greater than two");
-    }
     
     public static class Database
     {

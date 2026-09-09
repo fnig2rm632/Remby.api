@@ -1,4 +1,4 @@
-namespace ECommerce.Domain.Common;
+namespace Remby.Domain.Common;
 
 public class Result<T>
 {

@@ -1,4 +1,4 @@
-namespace ECommerce.Domain.Common;
+namespace Remby.Domain.Common;
 
 public abstract class Entity<TId>
 {
