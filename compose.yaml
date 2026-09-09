@@ -13,7 +13,7 @@
     networks:
       - remby_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U remby_user -d remby"]
+      test: ["CMD-SHELL", "pg_isReady -U remby_user -d remby"]
       interval: 10s
       timeout: 5s
       retries: 5
