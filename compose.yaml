@@ -1,0 +1,44 @@
+﻿services:
+  postgres:
+    image: postgres:16
+    container_name: remby_db
+    environment:
+      POSTGRES_BD: remby
+      POSTGRES_USER: remby_user
+      POSTGRES_PASSWORD: remby_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - remby_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U remby_user -d remby"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+  
+  api:
+    build:
+      context: .
+      dockerfile: src/Remby.Api/Dockerfile
+    container_name: remby_api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=remby;Username=remby_user;Password=remby_password
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: 
+    - remby_network
+    
+networks:
+  remby_network:
+    driver: bridge
+    
+volumes:
+  postgres_data:

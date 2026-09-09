@@ -1,5 +1,11 @@
-﻿namespace Remby.Application;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public class Class1
+namespace Remby.Application;
+
+public static class DependencyInjection
 {
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        return services;
+    }
 }

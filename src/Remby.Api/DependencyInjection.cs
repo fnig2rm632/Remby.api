@@ -1,4 +1,4 @@
-namespace Remby.api;
+namespace Remby.Api;
 
 public static class DependencyInjection
 {

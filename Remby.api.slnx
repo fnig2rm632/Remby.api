@@ -1,9 +1,11 @@
 <Solution>
-  <Folder Name="/docker/" />
+  <Folder Name="/docker/">
+    <File Path="compose.yaml" />
+  </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Remby.api/Remby.api.csproj" />
     <Project Path="src/Remby.Application/Remby.Application.csproj" />
     <Project Path="src/Remby.Domain/Remby.Domain.csproj" />
     <Project Path="src/Remby.Infrastructure/Remby.Infrastructure.csproj" />
+    <Project Path="src\Remby.Api\Remby.Api.csproj" />
   </Folder>
 </Solution>
