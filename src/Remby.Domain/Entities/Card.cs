@@ -8,6 +8,8 @@ public sealed class Card : Entity<int>
     public string Hint { get; private set; }
     public string Decision { get; private set; }
     public int FolderId { get; private set; }
+    public int RankId { get; private set; } = 1;
+    public Guid UserId { get; private set; }
     public DateTime LastRepeat { get; private set; }
     public DateTime DeleteAt { get; private set; }
     
@@ -23,68 +25,75 @@ public sealed class Card : Entity<int>
     private readonly List<Rank> _ranks = new();
     public IReadOnlyCollection<Rank> Ranks => _ranks.AsReadOnly();
     
-    private Card(int id, string title, string hint, string decision) : base(id)
+    private Card(int id, string title, string hint, string decision, Guid userId) : base(id)
     {
         Title = title;
         Hint = hint;
+        UserId = userId;
         Decision = decision;
     }
     
-    private Card(int id, string title, string hint, string decision, int folderId) : base(id)
+    private Card(int id, string title, string hint, string decision, Guid userId, int folderId) : base(id)
     {
         Title = title;
         Hint = hint;
         Decision = decision;
+        UserId = userId;
         FolderId = folderId;
     }
     
-    private Card(string title, string hint, string decision) : base(0)
+    private Card(string title, string hint, string decision, Guid userId) : base(0)
     {
         Title = title;
         Hint = hint;
         Decision = decision;
+        UserId = userId;
     }
     
-    private Card(string title, string hint, string decision, int folderId) : base(0)
+    private Card(string title, string hint, string decision, Guid userId, int folderId) : base(0)
     {
         Title = title;
         Hint = hint;
         Decision = decision;
+        UserId = userId;
         FolderId = folderId;
     }
 
-    public static Result<Card> Create(int id, string title, string hint, string decision, int folderId = -1)
+    public static Result<Card> Create(int id, string title, string hint, string decision, Guid userId, int folderId = -1)
     {
-        var success = ValidateCreationParameters(title, hint, decision);
+        var success = ValidateCreationParameters(title, hint, decision, userId);
 
         if (success.IsSuccess)
             return success.Error;
         
         var card = folderId == -1 
-            ? new Card(id, title, hint, decision) 
-            : new Card(id, title, hint, decision, folderId);
+            ? new Card(id, title, hint, decision, userId) 
+            : new Card(id, title, hint, decision, userId, folderId);
 
         return card;
     }
     
-    public static Result<Card> Create(string title, string hint, string decision, int folderId = -1)
+    public static Result<Card> Create(string title, string hint, string decision, Guid userId, int folderId = -1)
     {
-        var success = ValidateCreationParameters(title, hint, decision);
+        var success = ValidateCreationParameters(title, hint, decision, userId);
 
         if (success.IsSuccess)
             return success.Error;
         
         var card = folderId == -1 
-            ? new Card( title, hint, decision) 
-            : new Card( title, hint, decision, folderId);
+            ? new Card( title, hint, decision, userId) 
+            : new Card( title, hint, decision, userId, folderId);
 
         return card;
     }
 
-    private static Result ValidateCreationParameters(string title, string hint, string decision)
+    private static Result ValidateCreationParameters(string title, string hint, string decision, Guid userId)
     {
         if (string.IsNullOrEmpty(title))
             return Error.Card.EmptyTitle;
+
+        if (userId.Equals(Guid.Empty))
+            return Error.Card.UserIdIsEmpty;
 
         if (title.Length > 50)
             return Error.Card.TitleTooLong(50);
@@ -114,9 +123,19 @@ public sealed class Card : Entity<int>
     public Result UpdateLastRepeat(DateTime lastRepeat)
     {
         if (lastRepeat > DateTime.UtcNow)
-            return Error.Card.DeleteAtInFuture;
+            return Error.Card.LastRepeatInFuture;
         
         LastRepeat = lastRepeat;
+        
+        return Result.Success();
+    }
+
+    public Result ChangeRank(int rankId)
+    {
+        if (rankId == -1)
+            return Error.Rank.EmptyId;  
+        
+        RankId = rankId;
         
         return Result.Success();
     }

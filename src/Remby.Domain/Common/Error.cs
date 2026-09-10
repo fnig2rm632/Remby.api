@@ -21,6 +21,7 @@ public record Error(string Message, ErrorType ErrorType)
     public static class Folder
     {
         public static Error EmptyName => Validation("Folder cannot have empty Name");
+        public static Error EmptyUserId => Validation("User id cannot be empty");
         public static Error NameTooLong(int maxLength) => 
             Validation($"Folder name cannot exceed {maxLength} characters");
         public static Error DescriptionTooLong(int maxLength) => 
@@ -31,6 +32,7 @@ public record Error(string Message, ErrorType ErrorType)
     public static class Card
     {
         public static Error EmptyTitle => Validation("Card cannot have empty title");
+        public static Error UserIdIsEmpty => Validation("User id cannot be empty");
         public static Error TitleTooLong(int maxLength) => 
             Validation($"Title name cannot exceed {maxLength} characters");
         public static Error HintTooLong(int maxLength) => 
