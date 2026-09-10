@@ -3,7 +3,7 @@
     image: postgres:16
     container_name: remby_db
     environment:
-      POSTGRES_BD: remby
+      POSTGRES_DB: remby
       POSTGRES_USER: remby_user
       POSTGRES_PASSWORD: remby_password
     ports:
@@ -13,10 +13,11 @@
     networks:
       - remby_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isReady -U remby_user -d remby"]
+      test: ["CMD-SHELL", "pg_isready -U remby_user -d remby -h 127.0.0.1"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     
   
   api:

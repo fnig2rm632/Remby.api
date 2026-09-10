@@ -19,7 +19,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
       <PackageReference Include="Npgsql" Version="10.0.0" />
+      <PackageReference Include="Scalar.AspNetCore" Version="2.17.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Remby.Application\Remby.Application.csproj" />
+      <ProjectReference Include="..\Remby.Infrastructure\Remby.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

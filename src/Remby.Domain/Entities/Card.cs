@@ -10,8 +10,8 @@ public sealed class Card : Entity<int>
     public int FolderId { get; private set; }
     public int RankId { get; private set; } = 1;
     public Guid UserId { get; private set; }
-    public DateTime LastRepeat { get; private set; }
-    public DateTime DeleteAt { get; private set; }
+    public DateTime? LastRepeat { get; private set; }
+    public DateTime? DeleteAt { get; private set; }
     
     // ReSharper disable once CollectionNeverUpdated.Local
     private readonly List<User> _users = new();

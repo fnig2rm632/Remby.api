@@ -5,7 +5,7 @@ namespace Remby.Domain.Entities;
 public sealed class User : Entity<Guid>
 {
     public string Login { get; private set; }
-    public DateTime LastVisit { get; private set; }
+    public DateTime? LastVisit { get; private set; }
 
     private User(Guid id, string login, DateTime lastVisit) : base(id)
     {

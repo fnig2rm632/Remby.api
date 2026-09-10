@@ -7,7 +7,7 @@ public sealed class Folder : Entity<int>
     public string Name { get; private set; }
     public string Description { get; private set; }
     public Guid UserId { get; private set; }
-    public DateTime DeleteAt { get; private set; }
+    public DateTime? DeleteAt { get; private set; }
     
     // ReSharper disable once CollectionNeverUpdated.Local
     private readonly List<User> _users = new();

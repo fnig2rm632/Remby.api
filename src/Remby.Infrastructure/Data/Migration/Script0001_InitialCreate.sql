@@ -1,0 +1,35 @@
+create table if not exists ranks (
+    id integer primary key,
+    name varchar(255) not null,
+    time_repeat integer
+);
+
+create table if not exists users (
+    id uuid primary key,
+    login varchar(100) not null,
+    last_visit timestamptz 
+);
+
+create table if not exists folders (
+    id integer primary key,
+    name varchar(50) not null,
+    description varchar(255),
+    user_id uuid not null,
+    delete_at timestamptz,
+    foreign key (user_id) references users(id) 
+);
+
+create table if not exists cards (
+    id integer primary key,
+    title varchar(50) not null,
+    hint varchar(50),
+    decision varchar(255) not null,
+    folder_id int, 
+    rank_id int,               
+    user_id uuid,
+    last_repeat timestamptz,
+    delete_at timestamptz,
+    foreign key (folder_id) references folders(id),
+    foreign key (rank_id) references ranks(id),
+    foreign key (user_id) references users(id)
+    );
