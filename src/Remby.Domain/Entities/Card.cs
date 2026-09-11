@@ -63,7 +63,7 @@ public sealed class Card : Entity<int>
     {
         var success = ValidateCreationParameters(title, hint, decision, userId);
 
-        if (success.IsSuccess)
+        if (!success.IsSuccess)
             return success.Error;
         
         var card = folderId == -1 
@@ -77,7 +77,7 @@ public sealed class Card : Entity<int>
     {
         var success = ValidateCreationParameters(title, hint, decision, userId);
 
-        if (success.IsSuccess)
+        if (!success.IsSuccess)
             return success.Error;
         
         var card = folderId == -1 

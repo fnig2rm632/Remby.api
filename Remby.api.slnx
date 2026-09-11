@@ -8,4 +8,7 @@
     <Project Path="src/Remby.Infrastructure/Remby.Infrastructure.csproj" />
     <Project Path="src\Remby.Api\Remby.Api.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Remby.UnitTests/Remby.UnitTests.csproj" />
+  </Folder>
 </Solution>

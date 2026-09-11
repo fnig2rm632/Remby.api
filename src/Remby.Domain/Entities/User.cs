@@ -56,7 +56,7 @@ public sealed class User : Entity<Guid>
 
     public Result UpdateLastVisit(DateTime newLastVisit)
     {
-        if(newLastVisit > DateTime.Now)
+        if(newLastVisit > DateTime.UtcNow)
             return Error.User.DateVisitInFuture;
         
         LastVisit = newLastVisit;
