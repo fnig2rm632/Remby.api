@@ -16,4 +16,10 @@
       <ProjectReference Include="..\Remby.Domain\Remby.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="SQRS\Commands\" />
+      <Folder Include="SQRS\Queries\" />
+      <Folder Include="SQRS\Requests\" />
+    </ItemGroup>
+
 </Project>
