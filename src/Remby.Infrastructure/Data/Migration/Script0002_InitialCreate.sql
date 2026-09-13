@@ -5,4 +5,5 @@ Insert into ranks (id, name, time_repeat) values
 (4,'Ранг 4', 180),
 (5,'Ранг 5', 600),
 (6,'Ранг 6', 1440),
-(7,'Ранг 7', 10080);
+(7,'Ранг 7', 10080)
+on conflict (id) do nothing;

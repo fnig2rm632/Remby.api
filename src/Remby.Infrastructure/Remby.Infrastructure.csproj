@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Persistence\Command\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <EmbeddedResource Include="Data\Migration\*.sql" />
     </ItemGroup>
 

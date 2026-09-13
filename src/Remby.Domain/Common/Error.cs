@@ -52,6 +52,7 @@ public record Error(string Message, ErrorType ErrorType)
         public static Error ConnectionFailed => Unavailable("Connection to server failed");
         public static Error TimeoutGateway => Timeout("Timeout connection to server");
         public static Error InternalServer => Internal("Internal Server Error");
+        public static Error NoCompleted => NotFound("The action could not be completed.");
     }
 
     public static class Rank
