@@ -2,7 +2,7 @@ using Remby.Domain.Common;
 using Remby.Infrastructure.Persistence.Query;
 using Xunit;
 
-namespace Remby.IntegrationTests.Repositories;
+namespace Remby.IntegrationTests.Repositories.Query;
 
 [Collection("Integration Tests")]
 public class UserQueryRepositoryTest(TestInfrastructureFixture fixture)

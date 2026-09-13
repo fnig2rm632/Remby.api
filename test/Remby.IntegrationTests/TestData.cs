@@ -8,6 +8,9 @@ internal static class TestData
     public static readonly DateTime LastRepeatTime = 
         new(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
+    public static readonly DateTime DeleteTime = 
+        new(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
     public static async Task ClearAsync(NpgsqlConnection connection)
     {
         const string query = @"delete from cards;
@@ -55,5 +58,47 @@ internal static class TestData
             lastRepeat = lastRepeat ?? LastRepeatTime,
             deleteAt
         });
+    }
+
+    public static async Task<string?> GetUserLoginAsync(NpgsqlConnection connection, Guid id)
+    {
+        const string query = "select login from users where id = @id";
+
+        return await connection.QuerySingleOrDefaultAsync<string?>(query, new { id });
+    }
+
+    public static async Task<string?> GetFolderNameAsync(NpgsqlConnection connection, int id)
+    {
+        const string query = "select name from folders where id = @id";
+
+        return await connection.QuerySingleOrDefaultAsync<string?>(query, new { id });
+    }
+
+    public static async Task<DateTime?> GetFolderDeleteAtAsync(NpgsqlConnection connection, int id)
+    {
+        const string query = "select delete_at from folders where id = @id";
+
+        return await connection.QuerySingleOrDefaultAsync<DateTime?>(query, new { id });
+    }
+
+    public static async Task<string?> GetCardTitleAsync(NpgsqlConnection connection, int id)
+    {
+        const string query = "select title from cards where id = @id";
+
+        return await connection.QuerySingleOrDefaultAsync<string?>(query, new { id });
+    }
+
+    public static async Task<int?> GetCardRankIdAsync(NpgsqlConnection connection, int id)
+    {
+        const string query = "select rank_id from cards where id = @id";
+
+        return await connection.QuerySingleOrDefaultAsync<int?>(query, new { id });
+    }
+
+    public static async Task<DateTime?> GetCardDeleteAtAsync(NpgsqlConnection connection, int id)
+    {
+        const string query = "select delete_at from cards where id = @id";
+
+        return await connection.QuerySingleOrDefaultAsync<DateTime?>(query, new { id });
     }
 }
