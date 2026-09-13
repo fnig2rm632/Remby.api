@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.1.86" />
       <PackageReference Include="dbup-postgresql" Version="5.0.40" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
@@ -17,6 +18,14 @@
     <ItemGroup>
       <ProjectReference Include="..\Remby.Application\Remby.Application.csproj" />
       <ProjectReference Include="..\Remby.Domain\Remby.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Persistence\Command\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Data\Migration\*.sql" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: remby_test_db
+    environment:
+      POSTGRES_DB: remby_test
+      POSTGRES_USER: remby_test_user
+      POSTGRES_PASSWORD: remby_test_password
+    ports:
+      - "5434:5432"
+    networks:
+      - remby_test_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U remby_test_user -d remby_test -h 127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  remby_test_network:
+    driver: bridge

@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/docker/">
     <File Path="compose.yaml" />
+    <File Path="compose.test.yaml" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Remby.Application/Remby.Application.csproj" />
@@ -9,6 +10,7 @@
     <Project Path="src\Remby.Api\Remby.Api.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/Remby.IntegrationTests/Remby.IntegrationTests.csproj" />
     <Project Path="test/Remby.UnitTests/Remby.UnitTests.csproj" />
   </Folder>
 </Solution>

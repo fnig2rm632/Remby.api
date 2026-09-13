@@ -16,6 +16,7 @@ public record Error(string Message, ErrorType ErrorType)
     {
         public static Error EmptyLogin => Validation("User cannot have empty Login");
         public static Error DateVisitInFuture => Validation("User cannot have date in future");
+        public static Error UserNotFound => NotFound("User not found");
     }
 
     public static class Folder
@@ -27,6 +28,7 @@ public record Error(string Message, ErrorType ErrorType)
         public static Error DescriptionTooLong(int maxLength) => 
             Validation($"Description cannot exceed {maxLength} characters");
         public static Error DataInFuture => Validation("Date delete cannot be in future");
+        public static Error FolderNotFound => Validation("Folder not found");
     }
 
     public static class Card
@@ -42,6 +44,7 @@ public record Error(string Message, ErrorType ErrorType)
             Validation($"Decision cannot exceed {maxLength} characters");
         public static Error LastRepeatInFuture => Validation("Last repeat cannot be in future");
         public static Error DeleteAtInFuture => Validation("DeleteAt cannot be in future");
+        public static Error CardNotFound => NotFound("Card not found");
     }
     
     public static class Database
