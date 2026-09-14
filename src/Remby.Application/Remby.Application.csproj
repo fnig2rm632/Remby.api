@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="MediatR" Version="14.2.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
       <PackageReference Include="Npgsql" Version="10.0.0" />
     </ItemGroup>
@@ -17,9 +18,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="SQRS\Commands\" />
-      <Folder Include="SQRS\Queries\" />
-      <Folder Include="SQRS\Requests\" />
+      <Folder Include="Mappers\" />
+      <Folder Include="SQRS\Commands\Card\" />
+      <Folder Include="SQRS\Commands\Folder\" />
+      <Folder Include="SQRS\Commands\Rank\" />
+      <Folder Include="SQRS\Commands\User\" />
+      <Folder Include="SQRS\Queries\Card\" />
+      <Folder Include="SQRS\Queries\Folder\" />
+      <Folder Include="SQRS\Queries\Rank\" />
+      <Folder Include="SQRS\Requests\Card\" />
+      <Folder Include="SQRS\Requests\Folder\" />
+      <Folder Include="SQRS\Requests\Rank\" />
     </ItemGroup>
 
 </Project>
