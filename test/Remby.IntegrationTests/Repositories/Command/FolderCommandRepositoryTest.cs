@@ -19,7 +19,7 @@ public class FolderCommandRepositoryTest(TestInfrastructureFixture fixture)
         var folder = Folder.Create(name, "Description", userId).Value!;
         var repository = new FolderCommandRepository(connection);
 
-        var result = await repository.Add(folder);
+        var result = await repository.Add(folder, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var folderId = result.Value;
@@ -40,7 +40,7 @@ public class FolderCommandRepositoryTest(TestInfrastructureFixture fixture)
         var folder = Folder.Create(folderId, newName, "New description", userId).Value!;
         var repository = new FolderCommandRepository(connection);
 
-        var result = await repository.Update(folder);
+        var result = await repository.Update(folder, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(newName, await TestData.GetFolderNameAsync(connection, folderId));
@@ -54,7 +54,7 @@ public class FolderCommandRepositoryTest(TestInfrastructureFixture fixture)
         var folder = Folder.Create(1, "Folder 1", "Description", Guid.NewGuid()).Value!;
         var repository = new FolderCommandRepository(connection);
 
-        var result = await repository.Update(folder);
+        var result = await repository.Update(folder, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Database.NoCompleted, result.Error);
@@ -72,7 +72,7 @@ public class FolderCommandRepositoryTest(TestInfrastructureFixture fixture)
         var folder = Folder.Create(folderId, "New name", "New description", userId).Value!;
         var repository = new FolderCommandRepository(connection);
 
-        var result = await repository.Update(folder);
+        var result = await repository.Update(folder, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Database.NoCompleted, result.Error);
@@ -90,7 +90,7 @@ public class FolderCommandRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddFolderAsync(connection, folderId, "Folder 1", userId);
         var repository = new FolderCommandRepository(connection);
 
-        var result = await repository.UpdateTimeDelete(folderId, timeDeleted);
+        var result = await repository.UpdateTimeDelete(folderId, timeDeleted, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(timeDeleted, await TestData.GetFolderDeleteAtAsync(connection, folderId));
@@ -103,7 +103,7 @@ public class FolderCommandRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new FolderCommandRepository(connection);
 
-        var result = await repository.UpdateTimeDelete(1, TestData.DeleteTime);
+        var result = await repository.UpdateTimeDelete(1, TestData.DeleteTime, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Database.NoCompleted, result.Error);

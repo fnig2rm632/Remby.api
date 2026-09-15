@@ -19,7 +19,7 @@ public class FolderQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddFolderAsync(connection, folderId, folderName, userId);
         var repository = new FolderQueryRepository(connection);
 
-        var result = await repository.GetFolderById(folderId);
+        var result = await repository.GetFolderById(folderId, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var folder = result.Value;
@@ -35,7 +35,7 @@ public class FolderQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new FolderQueryRepository(connection);
 
-        var result = await repository.GetFolderById(1);
+        var result = await repository.GetFolderById(1, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Folder.FolderNotFound, result.Error);
@@ -51,7 +51,7 @@ public class FolderQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddFolderAsync(connection, 1, "Folder 1", userId, deleteAt: DateTime.UtcNow);
         var repository = new FolderQueryRepository(connection);
 
-        var result = await repository.GetFolderById(1);
+        var result = await repository.GetFolderById(1, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Folder.FolderNotFound, result.Error);
@@ -68,7 +68,7 @@ public class FolderQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddFolderAsync(connection, 2, "Folder 2", userId);
         var repository = new FolderQueryRepository(connection);
 
-        var result = await repository.GetListFoldersByUser(userId.ToString());
+        var result = await repository.GetListFoldersByUser(userId.ToString(), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(2, result.Value!.Count);
@@ -81,7 +81,7 @@ public class FolderQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new FolderQueryRepository(connection);
 
-        var result = await repository.GetListFoldersByUser(Guid.NewGuid().ToString());
+        var result = await repository.GetListFoldersByUser(Guid.NewGuid().ToString(), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Empty(result.Value!);
@@ -98,7 +98,7 @@ public class FolderQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddFolderAsync(connection, 2, "Folder 2", userId, deleteAt: DateTime.UtcNow);
         var repository = new FolderQueryRepository(connection);
 
-        var result = await repository.GetListFoldersByUser(userId.ToString());
+        var result = await repository.GetListFoldersByUser(userId.ToString(), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var folder = Assert.Single(result.Value!);

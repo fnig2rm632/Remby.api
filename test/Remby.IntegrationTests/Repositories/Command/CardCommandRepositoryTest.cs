@@ -20,7 +20,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         var card = Card.Create(title, "Hint", "Decision", userId, 1).Value!;
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.Create(card);
+        var result = await repository.Create(card, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var cardId = result.Value;
@@ -39,7 +39,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         var card = Card.Create(title, "Hint", "Decision", userId).Value!;
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.Create(card);
+        var result = await repository.Create(card, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var cardId = result.Value;
@@ -60,7 +60,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         var card = Card.Create(cardId, newTitle, "Hint", "Decision", userId).Value!;
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.Update(card);
+        var result = await repository.Update(card, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(newTitle, await TestData.GetCardTitleAsync(connection, cardId));
@@ -74,7 +74,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         var card = Card.Create(1, "Title", "Hint", "Decision", Guid.NewGuid()).Value!;
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.Update(card);
+        var result = await repository.Update(card, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Database.NoCompleted, result.Error);
@@ -91,7 +91,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, cardId, "Title", userId);
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.UpdateRank(cardId, 3);
+        var result = await repository.UpdateRank(cardId, 3, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(3, await TestData.GetCardRankIdAsync(connection, cardId));
@@ -104,7 +104,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.UpdateRank(1, 3);
+        var result = await repository.UpdateRank(1, 3, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Database.NoCompleted, result.Error);
@@ -122,7 +122,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, cardId, "Title", userId);
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.UpdateTimeDelete(cardId, timeDeleted);
+        var result = await repository.UpdateTimeDelete(cardId, timeDeleted, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(timeDeleted, await TestData.GetCardDeleteAtAsync(connection, cardId));
@@ -135,7 +135,7 @@ public class CardCommandRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new CardCommandRepository(connection);
 
-        var result = await repository.UpdateTimeDelete(1, TestData.DeleteTime);
+        var result = await repository.UpdateTimeDelete(1, TestData.DeleteTime, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Database.NoCompleted, result.Error);

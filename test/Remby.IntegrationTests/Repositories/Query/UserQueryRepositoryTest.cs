@@ -17,7 +17,7 @@ public class UserQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddUserAsync(connection, userId, login);
         var repository = new UserQueryRepository(connection);
 
-        var result = await repository.GetUserByGuid(userId.ToString());
+        var result = await repository.GetUserByGuid(userId, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var user = result.Value;
@@ -33,7 +33,7 @@ public class UserQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new UserQueryRepository(connection);
 
-        var result = await repository.GetUserByGuid(Guid.NewGuid().ToString());
+        var result = await repository.GetUserByGuid(Guid.NewGuid(), CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.User.UserNotFound, result.Error);

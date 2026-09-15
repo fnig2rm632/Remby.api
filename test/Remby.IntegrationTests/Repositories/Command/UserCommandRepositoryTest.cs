@@ -17,7 +17,7 @@ public class UserCommandRepositoryTest(TestInfrastructureFixture fixture)
         var user = User.Create(userId, login, DateTime.UtcNow.AddHours(-1)).Value!;
         var repository = new UserCommandRepository(connection);
 
-        var result = await repository.Add(user);
+        var result = await repository.Add(user, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(login, await TestData.GetUserLoginAsync(connection, userId));

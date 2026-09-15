@@ -19,7 +19,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, cardId, title, userId);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetCardById(cardId);
+        var result = await repository.GetCardById(cardId, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var card = result.Value;
@@ -35,7 +35,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetCardById(1);
+        var result = await repository.GetCardById(1, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Card.CardNotFound, result.Error);
@@ -51,7 +51,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, 1, "Title", userId, deleteAt: DateTime.UtcNow);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetCardById(1);
+        var result = await repository.GetCardById(1, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
         Assert.Equal(Error.Card.CardNotFound, result.Error);
@@ -68,7 +68,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, 2, "Title 2", userId);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetListCardsByUserId(userId.ToString());
+        var result = await repository.GetListCardsByUserId(userId.ToString(), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Equal(2, result.Value!.Count);
@@ -81,7 +81,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.ClearAsync(connection);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetListCardsByUserId(Guid.NewGuid().ToString());
+        var result = await repository.GetListCardsByUserId(Guid.NewGuid().ToString(), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         Assert.Empty(result.Value!);
@@ -98,7 +98,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, 2, "Title 2", userId, deleteAt: DateTime.UtcNow);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetListCardsByUserId(userId.ToString());
+        var result = await repository.GetListCardsByUserId(userId.ToString(), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var card = Assert.Single(result.Value!);
@@ -115,7 +115,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, 1, "Title 1", userId);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetListCardsByUserIdWithActive(userId.ToString());
+        var result = await repository.GetListCardsByUserIdWithActive(userId.ToString(), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var card = Assert.Single(result.Value!);
@@ -137,7 +137,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, 2, "Title 2", userId, folderId: 2);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetListCardsByUserAndFoldersId(userId.ToString(), [1]);
+        var result = await repository.GetListCardsByUserAndFoldersId(userId.ToString(), [1], CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var card = Assert.Single(result.Value!);
@@ -157,7 +157,7 @@ public class CardQueryRepositoryTest(TestInfrastructureFixture fixture)
         await TestData.AddCardAsync(connection, 2, "Title 2", userId, folderId: 2);
         var repository = new CardQueryRepositor(connection);
 
-        var result = await repository.GetListCardsByUserAndFoldersIdWithActive(userId.ToString(), [1]);
+        var result = await repository.GetListCardsByUserAndFoldersIdWithActive(userId.ToString(), [1], CancellationToken.None);
 
         Assert.True(result.IsSuccess);
         var card = Assert.Single(result.Value!);
