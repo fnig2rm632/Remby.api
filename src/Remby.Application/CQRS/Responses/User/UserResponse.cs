@@ -1,4 +1,4 @@
-namespace Remby.Application.SQRS.Responses.User;
+namespace Remby.Application.CQRS.Responses.User;
 
 public class UserResponse
 {

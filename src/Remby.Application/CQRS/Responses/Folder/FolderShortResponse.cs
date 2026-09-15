@@ -1,4 +1,4 @@
-namespace Remby.Application.SQRS.Responses.Folder;
+namespace Remby.Application.CQRS.Responses.Folder;
 
 public class FolderShortResponse
 {

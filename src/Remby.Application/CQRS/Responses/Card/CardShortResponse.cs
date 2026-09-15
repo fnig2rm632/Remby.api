@@ -1,4 +1,4 @@
-namespace Remby.Application.SQRS.Responses.Card;
+namespace Remby.Application.CQRS.Responses.Card;
 
 public class CardShortResponse
 {
