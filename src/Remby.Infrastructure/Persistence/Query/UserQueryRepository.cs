@@ -1,23 +1,27 @@
 using Dapper;
 using Npgsql;
+using Remby.Application.CQRS.Responses.User;
 using Remby.Application.Interfaces.Query;
-using Remby.Application.SQRS.Responses.User;
 using Remby.Domain.Common;
 
 namespace Remby.Infrastructure.Persistence.Query;
 
 public class UserQueryRepository(NpgsqlConnection connection) : IUserQueryRepository
 {
-    public async Task<Result<UserResponse>> GetUserByGuid(string guid)
+    public async Task<Result<UserResponse>> GetUserByGuid(Guid guid, CancellationToken token)
     {
         try
         {
             const string query = @"select * 
                                    from users
-                                   where id = @guid::uuid";
+                                   where id = @guid";
 
-            var user = await connection.QuerySingleOrDefaultAsync<UserResponse>
-                (query, new { Guid = guid });
+            var command = new CommandDefinition(
+                query,
+                new { Guid = guid },
+                cancellationToken: token);
+
+            var user = await connection.QuerySingleOrDefaultAsync<UserResponse>(command);
 
             if (user == null)
                 return Error.User.UserNotFound;

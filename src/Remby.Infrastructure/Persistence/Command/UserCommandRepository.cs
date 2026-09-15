@@ -8,12 +8,12 @@ namespace Remby.Infrastructure.Persistence.Command;
 
 public class UserCommandRepository(NpgsqlConnection connection) : IUserCommandRepository
 {
-    public async Task<Result> Add(User user)
+    public async Task<Result> Add(User user, CancellationToken token)
     {
         try
         {
-            const string command = @"insert into users(id, login, last_visit) 
-                                     values(@id, @login, @lastVisit)";
+            const string sql = @"insert into users(id, login, last_visit) 
+                                 values(@id, @login, @lastVisit)";
             
             var parameters = new DynamicParameters();
             
@@ -21,7 +21,12 @@ public class UserCommandRepository(NpgsqlConnection connection) : IUserCommandRe
             parameters.Add("login", user.Login);
             parameters.Add("lastVisit", user.LastVisit);
 
-            var result = await connection.ExecuteAsync(command, parameters);
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var result = await connection.ExecuteAsync(command);
             
             if (result == 0)
                 return Error.Database.NoCompleted;

@@ -8,21 +8,26 @@ namespace Remby.Infrastructure.Persistence.Command;
 
 public class FolderCommandRepository(NpgsqlConnection connection) : IFolderCommandRepository
 {
-    public async Task<Result<int>> Add(Folder folder)
+    public async Task<Result<int>> Add(Folder folder, CancellationToken token)
     {
         try
         {
-            const string command = @"insert into folders(name, description, user_id) 
-                                     values(@name, @description, @userId)
-                                     returning id";
+            const string sql = @"insert into folders(name, description, user_id) 
+                                 values(@name, @description, @userId)
+                                 returning id";
             
             var parameters = new DynamicParameters();
             
             parameters.Add("name", folder.Name);
             parameters.Add("description", folder.Description);
             parameters.Add("userId", folder.UserId);
-            
-            var id = await connection.ExecuteScalarAsync<int>(command, parameters);
+
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var id = await connection.ExecuteScalarAsync<int>(command);
             
             if (id == 0)
                 return Error.Database.NoCompleted;
@@ -42,22 +47,27 @@ public class FolderCommandRepository(NpgsqlConnection connection) : IFolderComma
         }
     }
 
-    public async Task<Result> Update(Folder folder)
+    public async Task<Result> Update(Folder folder, CancellationToken token)
     {
         try
         {
-            const string command = @"update folders
-                                     set name = @name,
-                                         description = @description
-                                     where delete_at is null 
-                                     and id = @id";
+            const string sql = @"update folders
+                                 set name = @name,
+                                     description = @description
+                                 where delete_at is null 
+                                 and id = @id";
         
             var parameters = new DynamicParameters();
             parameters.Add("name", folder.Name);
             parameters.Add("description", folder.Description);
             parameters.Add("id", folder.Id);
-        
-            var result = await connection.ExecuteAsync(command, parameters);
+
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var result = await connection.ExecuteAsync(command);
 
             if (result == 0)
                 return Error.Database.NoCompleted;
@@ -78,20 +88,25 @@ public class FolderCommandRepository(NpgsqlConnection connection) : IFolderComma
         }
     }
 
-    public async Task<Result> UpdateTimeDelete(int folderId, DateTime timeDeleted)
+    public async Task<Result> UpdateTimeDelete(int folderId, DateTime timeDeleted, CancellationToken token)
     {
         try
         {
-            const string command = @"update folders
-                                     set delete_at = @deleteAt
-                                     where delete_at is null 
-                                     and id = @id";
+            const string sql = @"update folders
+                                 set delete_at = @deleteAt
+                                 where delete_at is null 
+                                 and id = @id";
         
             var parameters = new DynamicParameters();
             parameters.Add("id", folderId);
             parameters.Add("deleteAt", timeDeleted);
-        
-            var result = await connection.ExecuteAsync(command, parameters);
+
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var result = await connection.ExecuteAsync(command);
 
             if (result == 0)
                 return Error.Database.NoCompleted;

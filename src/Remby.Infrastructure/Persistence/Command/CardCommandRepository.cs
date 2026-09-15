@@ -8,24 +8,29 @@ namespace Remby.Infrastructure.Persistence.Command;
 
 public class CardCommandRepository(NpgsqlConnection connection) : ICardCommandRepository
 {
-    public async Task<Result<int>> Create(Card card)
+    public async Task<Result<int>> Create(Card card, CancellationToken token)
     {
         try
         {
-            const string command = @"insert into cards(title, hint, decision, folder_id, rank_id, user_id) 
-                                     values(@title, @hint, @decision, @folderId, @rankId, @userId)
-                                     returning id";
+            const string sql = @"insert into cards(title, hint, decision, folder_id, rank_id, user_id) 
+                                 values(@title, @hint, @decision, @folderId, @rankId, @userId)
+                                 returning id";
             
             var parameters = new DynamicParameters();
             
             parameters.Add("title", card.Title);
             parameters.Add("hint", card.Hint);
             parameters.Add("decision", card.Decision);
-            parameters.Add("folderId", card.FolderId > 0 ? card.FolderId : (int?)null);
+            parameters.Add("folderId", card.FolderId > 0 ? card.FolderId : null);
             parameters.Add("rankId", card.RankId);
             parameters.Add("userId", card.UserId);
 
-            var id = await connection.ExecuteScalarAsync<int>(command, parameters);
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var id = await connection.ExecuteScalarAsync<int>(command);
             
             if (id == 0)
                 return Error.Database.NoCompleted;
@@ -45,27 +50,32 @@ public class CardCommandRepository(NpgsqlConnection connection) : ICardCommandRe
         }
     }
 
-    public async Task<Result> Update(Card card)
+    public async Task<Result> Update(Card card, CancellationToken token)
     {
         try
         {
-            const string command = @"update cards
-                                     set title = @title,
-                                         hint = @hint,
-                                         decision = @decision,
-                                         folder_id = @folderId
-                                     where delete_at is null 
-                                     and id = @id";
+            const string sql = @"update cards
+                                 set title = @title,
+                                     hint = @hint,
+                                     decision = @decision,
+                                     folder_id = @folderId
+                                 where delete_at is null 
+                                 and id = @id";
         
             var parameters = new DynamicParameters();
         
             parameters.Add("title", card.Title);
             parameters.Add("hint", card.Hint);
             parameters.Add("decision", card.Decision);
-            parameters.Add("folderId", card.FolderId > 0 ? card.FolderId : (int?)null);
+            parameters.Add("folderId", card.FolderId > 0 ? card.FolderId : null);
             parameters.Add("id", card.Id);
-        
-            var result = await connection.ExecuteAsync(command, parameters);
+
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var result = await connection.ExecuteAsync(command);
         
             if (result == 0)
                 return Error.Database.NoCompleted;
@@ -86,21 +96,26 @@ public class CardCommandRepository(NpgsqlConnection connection) : ICardCommandRe
         }
     }
 
-    public async Task<Result> UpdateRank(int cardId, int rank)
+    public async Task<Result> UpdateRank(int cardId, int rank, CancellationToken token)
     {
         try
         {
-            const string command = @"update cards
-                                     set rank_id = @rankId
-                                     where delete_at is null 
-                                     and id = @id";
+            const string sql = @"update cards
+                                 set rank_id = @rankId
+                                 where delete_at is null 
+                                 and id = @id";
         
             var parameters = new DynamicParameters();
         
             parameters.Add("id", cardId);
             parameters.Add("rankId", rank);
-        
-            var result = await connection.ExecuteAsync(command, parameters);
+
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var result = await connection.ExecuteAsync(command);
         
             if (result == 0)
                 return Error.Database.NoCompleted;
@@ -121,21 +136,26 @@ public class CardCommandRepository(NpgsqlConnection connection) : ICardCommandRe
         }
     }
 
-    public async Task<Result> UpdateTimeDelete(int cardId, DateTime timeDeleted)
+    public async Task<Result> UpdateTimeDelete(int cardId, DateTime timeDeleted, CancellationToken token)
     {
         try
         {
-            const string command = @"update cards
-                                     set delete_at = @deleteAt
-                                     where delete_at is null 
-                                     and id = @id";
+            const string sql = @"update cards
+                                 set delete_at = @deleteAt
+                                 where delete_at is null 
+                                 and id = @id";
         
             var parameters = new DynamicParameters();
         
             parameters.Add("id", cardId);
             parameters.Add("deleteAt", timeDeleted);
-        
-            var result = await connection.ExecuteAsync(command, parameters);
+
+            var command = new CommandDefinition(
+                sql,
+                parameters,
+                cancellationToken: token);
+
+            var result = await connection.ExecuteAsync(command);
         
             if (result == 0)
                 return Error.Database.NoCompleted;

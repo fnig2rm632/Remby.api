@@ -1,14 +1,14 @@
 using Dapper;
 using Npgsql;
+using Remby.Application.CQRS.Responses.Folder;
 using Remby.Application.Interfaces.Query;
-using Remby.Application.SQRS.Responses.Folder;
 using Remby.Domain.Common;
 
 namespace Remby.Infrastructure.Persistence.Query;
 
 public class FolderQueryRepository(NpgsqlConnection connection) : IFolderQueryRepository
 {
-    public async Task<Result<FolderResponse>> GetFolderById(int id)
+    public async Task<Result<FolderResponse>> GetFolderById(int id, CancellationToken token)
     {
         try
         {
@@ -17,8 +17,12 @@ public class FolderQueryRepository(NpgsqlConnection connection) : IFolderQueryRe
                                    where delete_at is null
                                    and id = @id";
 
-            var folder = await connection.QuerySingleOrDefaultAsync<FolderResponse>
-                (query, new { Id = id });
+            var command = new CommandDefinition(
+                query,
+                new { Id = id },
+                cancellationToken: token);
+
+            var folder = await connection.QuerySingleOrDefaultAsync<FolderResponse>(command);
 
             if (folder == null)
                 return Error.Folder.FolderNotFound;
@@ -39,7 +43,7 @@ public class FolderQueryRepository(NpgsqlConnection connection) : IFolderQueryRe
         }
     }
 
-    public async Task<Result<List<FolderShortResponse>>> GetListFoldersByUser(string userId)
+    public async Task<Result<List<FolderShortResponse>>> GetListFoldersByUser(string userId, CancellationToken token)
     {
         try
         {
@@ -48,8 +52,12 @@ public class FolderQueryRepository(NpgsqlConnection connection) : IFolderQueryRe
                                    where delete_at is null
                                    and user_id = @userId::uuid";
             
-            var folders = await connection.QueryAsync<FolderShortResponse>
-                (query, new { UserId = userId });
+            var command = new CommandDefinition(
+                query,
+                new { UserId = userId },
+                cancellationToken: token);
+
+            var folders = await connection.QueryAsync<FolderShortResponse>(command);
             
             return folders.ToList();
         }

@@ -5,5 +5,5 @@ namespace Remby.Application.Interfaces.Command;
 
 public interface IUserCommandRepository
 {
-    Task<Result> Add(User user);
+    Task<Result> Add(User user, CancellationToken token);
 }
